@@ -18,6 +18,10 @@ module.exports = {
       },
       fontFamily: {
         mono: ['SpaceMono', 'ui-monospace', 'monospace'],
+        'mono-bold': ['SpaceMonoBold', 'ui-monospace', 'monospace'],
+      },
+      fontSize: {
+        '2xs': ['11px', { lineHeight: '16px' }],
       },
     },
   },

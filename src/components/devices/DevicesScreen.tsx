@@ -14,7 +14,7 @@ import { AppHeader } from '@/src/components/AppHeader';
 import { DeleteDeviceConfirm, DeviceActionMenu } from '@/src/components/devices/DeviceActionMenu';
 import { CompactGrid, DetailedList } from '@/src/components/devices/DeviceCards';
 import { rackLetter, STATUS_RANK } from '@/src/components/devices/helpers';
-import { DetailSheet, QuickSheet, ScanSheet } from '@/src/components/devices/Sheets';
+import { DetailSheet, QuickSheet } from '@/src/components/devices/Sheets';
 import { applyPinnedDeviceOrder, pinDeviceId, unpinDeviceId } from '@/src/runtime/device-order';
 import { loadPinnedIds, savePinnedIds } from '@/src/runtime/pins';
 import { connectDevice, ensureRuntime, removeDevice } from '@/src/runtime/runtime';
@@ -41,12 +41,10 @@ export function DevicesScreen() {
   const [selectedRack, setSelectedRack] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState<SortOrder>('default');
-  const [sortOpen, setSortOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [allOnOnePage, setAllOnOnePage] = useState(false);
   const [quick, setQuick] = useState<PrinterCard | null>(null);
   const [detail, setDetail] = useState<PrinterCard | null>(null);
-  const [scanOpen, setScanOpen] = useState(false);
   const [actionId, setActionId] = useState<string | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [pinnedIds, setPinnedIds] = useState<string[]>([]);
@@ -186,18 +184,14 @@ export function DevicesScreen() {
       <AppHeader
         printers={printers}
         printingCount={printingCount}
-        onScan={() => setScanOpen(true)}
-        onOpenDetail={() => {
-          const current = printers.find((printer) => printer.id === activeId);
-          if (!current) {
-            showToast('还没有设备');
-            return;
-          }
-          setDetail(current);
-        }}
+        onAddDevice={() => router.push('/add-device')}
+        onScanPhoto={() => router.push('/ocr')}
       />
 
-      <ScrollView className="flex-1" contentContainerClassName="gap-3 px-3.5 pt-3 pb-8" keyboardShouldPersistTaps="handled">
+      <ScrollView
+        className="flex-1"
+        contentContainerClassName="grow-0 gap-3 px-3.5 pt-3 pb-8"
+        keyboardShouldPersistTaps="handled">
           <View className="flex-row gap-1.5">
             <StatPill label="全部设备" value={printers.length} active={statusFilter === 'all'} onPress={() => { setStatusFilter('all'); setCurrentPage(1); }} />
             <StatPill label="打印中" value={printingCount} active={statusFilter === 'printing'} tone="emerald" onPress={() => { setStatusFilter('printing'); setCurrentPage(1); }} />
@@ -276,7 +270,7 @@ export function DevicesScreen() {
               </Pressable>
             ) : null}
             {noDevices && !loadError ? (
-              <Pressable onPress={() => setScanOpen(true)} className="mt-3 rounded-xl bg-brand px-3 py-2">
+              <Pressable onPress={() => router.push('/add-device')} className="mt-3 rounded-md bg-brand px-3 py-2">
                 <Text className="text-sm font-semibold text-ink">添加设备</Text>
               </Pressable>
             ) : null}
@@ -309,7 +303,7 @@ export function DevicesScreen() {
                   className="rounded-lg bg-soft p-1.5">
                   <ChevronLeft color={safePage <= 1 ? '#C5C3D1' : '#4A4863'} size={14} />
                 </Pressable>
-                <Text className="px-1 font-mono text-sm font-semibold text-deep">{safePage}</Text>
+                <Text className="px-1 font-mono-bold text-sm text-deep">{safePage}</Text>
                 <Pressable
                   disabled={safePage >= totalPages}
                   onPress={() => setCurrentPage(Math.min(totalPages, safePage + 1))}
@@ -353,7 +347,6 @@ export function DevicesScreen() {
         }}
         onRemove={(id) => deletePrinter(id)}
       />
-      <ScanSheet visible={scanOpen} onClose={() => setScanOpen(false)} onToast={showToast} />
       <DeviceActionMenu
         printer={actionPrinter}
         pinned={actionPrinter ? pinnedIds.includes(actionPrinter.id) : false}
@@ -389,14 +382,14 @@ function StatPill({
   active: boolean;
   onPress: () => void;
 }) {
-  const activeClass = 'bg-[#f7f7f7]';
-  const valueClass = 'text-brand';
+  const activeClass = 'bg-[#34E0A1]';
+  const valueClass = 'text-brand color-[#101010]';
   return (
     <Pressable
       onPress={onPress}
-      className={`flex-1 items-center rounded-xl border px-1 py-2 border-none ${active ? activeClass : 'bg-soft'}`}>
-      <Text className="text-[11px] text-muted">{label}</Text>
-      <Text className={`mt-0.5 font-mono text-base font-bold ${active ? valueClass : 'text-ink'}`}>{value}</Text>
+      className={`flex-1 items-center rounded-xl px-1 py-2 ${active ? activeClass : 'bg-[#F7F7F7]'}`}>
+      <Text className="text-md text-muted color-[#101010]">{label}</Text>
+      <Text className={`mt-0.5 font-mono-bold text-base ${active ? valueClass : 'text-ink'}`}>{value}</Text>
     </Pressable>
   );
 }

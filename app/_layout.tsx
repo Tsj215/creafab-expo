@@ -9,11 +9,16 @@ import 'react-native-reanimated';
 
 export { ErrorBoundary } from 'expo-router';
 
+export const unstable_settings = {
+  anchor: '(tabs)',
+};
+
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    SpaceMonoBold: require('../assets/fonts/SpaceMono-Bold.ttf'),
   });
 
   useEffect(() => {
@@ -33,6 +38,17 @@ export default function RootLayout() {
       <StatusBar style="dark" translucent backgroundColor="transparent" />
       <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#F8F8F8' } }}>
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen
+          name="add-device"
+          options={{
+            presentation: 'formSheet',
+            headerShown: false,
+            sheetAllowedDetents: 'fitToContents',
+            sheetGrabberVisible: true,
+            sheetCornerRadius: 16,
+            contentStyle: { backgroundColor: '#FFFFFF' },
+          }}
+        />
       </Stack>
     </>
   );

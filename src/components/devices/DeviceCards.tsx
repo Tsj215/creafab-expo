@@ -11,10 +11,9 @@ import {
   Pause,
   Pin,
   Play,
-  SlidersHorizontal,
   Sparkles,
   Tv,
-  Wifi,
+  Wifi
 } from 'lucide-react-native';
 import type { ReactNode } from 'react';
 import { Image, Pressable, Text, View } from 'react-native';
@@ -80,7 +79,7 @@ type GridProps = {
 };
 
 function Wrap({ children }: { children: ReactNode }) {
-  return <View className="-m-1 flex-row flex-wrap">{children}</View>;
+  return <View className="-m-1 flex-row flex-wrap content-start items-stretch">{children}</View>;
 }
 
 function Cell({ cols, children }: { cols: number; children: ReactNode }) {
@@ -114,7 +113,7 @@ export function NanoGrid({ printers, onSelect, onLongPress, pinnedIds }: GridPro
                         : 'border-line bg-soft'
               }`}>
               <View className="flex-row items-center justify-between">
-                <Text className="font-mono text-[11px] font-semibold text-ink" numberOfLines={1}>
+                <Text className="font-mono-bold text-2xs text-ink" numberOfLines={1}>
                   {machineCode(printer.name, printer.ipAddress)}
                 </Text>
                 <View className="flex-row items-center gap-1">
@@ -125,40 +124,40 @@ export function NanoGrid({ printers, onSelect, onLongPress, pinnedIds }: GridPro
               <View className="items-center">
                 {printing ? (
                   <>
-                    <Text className="font-mono text-sm font-black text-brand">{progress}%</Text>
-                    <Text className="font-mono text-[11px] text-muted">
+                    <Text className="font-mono-bold text-sm text-brand">{progress}%</Text>
+                    <Text className="font-mono text-2xs text-muted">
                       {printer.job ? formatRemain(printer.job.timeRemainingSec) : ''}
                     </Text>
                   </>
                 ) : paused ? (
                   <>
-                    <Text className="font-mono text-sm font-semibold text-warn">{progress}%</Text>
-                    <Text className="text-[11px] text-warn">已暂停</Text>
+                    <Text className="font-mono-bold text-sm text-warn">{progress}%</Text>
+                    <Text className="text-2xs text-warn">已暂停</Text>
                   </>
                 ) : heating ? (
                   <>
                     <Sparkles color="#26225F" size={14} />
-                    <Text className="text-[11px] font-bold text-deep">预热中</Text>
+                    <Text className="text-2xs font-bold text-deep">预热中</Text>
                   </>
                 ) : completed ? (
                   <>
                     <CheckCircle2 color="#2AB381" size={14} />
-                    <Text className="text-[11px] font-bold text-brand">已完成</Text>
+                    <Text className="text-2xs font-bold text-brand">已完成</Text>
                   </>
                 ) : printer.status === 'connecting' ? (
                   <>
                     <ModelOrIcon model={printer.modelCode} size={22} icon={<Sparkles color="#26225F" size={14} />} />
-                    <Text className="text-[11px] font-bold text-deep">连接中</Text>
+                    <Text className="text-2xs font-bold text-deep">连接中</Text>
                   </>
                 ) : printer.status === 'offline' ? (
                   <>
                     <ModelOrIcon model={printer.modelCode} size={22} icon={<Box color="#4A4863" size={12} />} />
-                    <Text className="text-[11px] text-muted">未连接</Text>
+                    <Text className="text-2xs text-muted">未连接</Text>
                   </>
                 ) : (
                   <>
                     <ModelOrIcon model={printer.modelCode} size={22} icon={<Box color="#4A4863" size={12} />} />
-                    <Text className="text-[11px] text-muted">待机</Text>
+                    <Text className="text-2xs text-muted">待机</Text>
                   </>
                 )}
               </View>
@@ -166,10 +165,10 @@ export function NanoGrid({ printers, onSelect, onLongPress, pinnedIds }: GridPro
                 <ProgressBar progress={progress} paused={paused} height={4} />
               ) : (
                 <View className="flex-row items-center justify-between border-t border-line pt-0.5">
-                  <Text className="font-mono text-[11px] text-warn">
+                  <Text className="font-mono text-2xs text-warn">
                     {liveReading(printer.status, `${printer.nozzle.current.toFixed(0)}°`)}
                   </Text>
-                  <Text className="font-mono text-[11px] text-deep">
+                  <Text className="font-mono text-2xs text-deep">
                     {liveReading(printer.status, `${printer.bed.current.toFixed(0)}°`)}
                   </Text>
                 </View>
@@ -213,14 +212,14 @@ export function MicroGrid({ printers, onSelect, onLongPress, pinnedIds }: GridPr
                     {printer.name.split(' ')[0]}
                   </Text>
                 </View>
-                <Text className="font-mono text-[11px] text-muted">.{printer.ipAddress.split('.').pop()}</Text>
+                <Text className="font-mono text-2xs text-muted">.{printer.ipAddress.split('.').pop()}</Text>
               </View>
               <View className="py-1.5">
                 {printing || paused ? (
                   <>
                     <View className="mb-1 flex-row items-end justify-between">
-                      <Text className="font-mono text-base font-semibold text-ink">{progress}%</Text>
-                      <Text className="text-[11px] text-muted">
+                      <Text className="font-mono-bold text-base text-ink">{progress}%</Text>
+                      <Text className="text-2xs text-muted">
                         {printer.job ? formatRemain(printer.job.timeRemainingSec) : ''}
                       </Text>
                     </View>
@@ -241,13 +240,13 @@ export function MicroGrid({ printers, onSelect, onLongPress, pinnedIds }: GridPr
                 )}
               </View>
               <View className="flex-row items-center justify-between border-t border-line pt-1">
-                <Text className="font-mono text-[11px] text-warn">
+                <Text className="font-mono text-2xs text-warn">
                   {liveReading(printer.status, `${printer.nozzle.current.toFixed(0)}°`)}
                 </Text>
-                <Text className="font-mono text-[11px] text-deep">
+                <Text className="font-mono text-2xs text-deep">
                   {liveReading(printer.status, `${printer.bed.current.toFixed(0)}°`)}
                 </Text>
-                <Text className="max-w-[48px] text-[11px] text-muted" numberOfLines={1}>
+                <Text className="max-w-[48px] text-2xs text-muted" numberOfLines={1}>
                   {printer.model}
                 </Text>
               </View>
@@ -309,7 +308,7 @@ export function CompactGrid(props: GridProps) {
               delayLongPress={400}
               onLongPress={() => onLongPress(printer)}
               onPress={() => onSelect(printer)}
-              className="h-full gap-2 rounded-2xl border border-line bg-card p-3">
+              className="grow gap-2 rounded-2xl bg-[#F7F7F7] p-3">
               <View className="flex-row items-start justify-between gap-1">
                 <ModelThumb model={printer.modelCode} size={36} />
                 <View className="min-w-0 flex-1">
@@ -325,7 +324,7 @@ export function CompactGrid(props: GridProps) {
                   </Text>
                 </View>
                 <Text
-                  className={`rounded-full px-1.5 py-0.5 text-[11px] font-semibold ${
+                  className={`rounded-full px-1.5 py-0.5 text-2xs font-semibold ${
                     printing
                       ? 'bg-brand/15 text-brand'
                       : paused
@@ -341,7 +340,7 @@ export function CompactGrid(props: GridProps) {
                 {job ? (
                   <>
                     <View className="flex-row items-end justify-between">
-                      <Text className="font-mono text-base font-semibold text-ink">{job.progressPercent}%</Text>
+                      <Text className="font-mono-bold text-base text-ink">{job.progressPercent}%</Text>
                       <Text className="text-xs text-muted">余 {formatRemain(job.timeRemainingSec)}</Text>
                     </View>
                     <ProgressBar progress={job.progressPercent} paused={paused} />
@@ -371,7 +370,7 @@ export function CompactGrid(props: GridProps) {
                     {liveReading(printer.status, `${printer.bed.current.toFixed(0)}°`)}
                   </Text>
                 </View>
-                <Text className="font-mono text-[11px] text-brand">
+                <Text className="font-mono text-2xs text-brand">
                   {liveReading(printer.status, `${printer.pingLatencyMs}ms`)}
                 </Text>
               </View>
@@ -408,8 +407,8 @@ export function DetailedList(props: GridProps) {
             delayLongPress={400}
             onLongPress={() => onLongPress(printer)}
             onPress={() => onSelect(printer)}
-            className="overflow-hidden rounded-2xl border border-line bg-card">
-            <View className="flex-row items-center justify-between gap-2 border-b border-line bg-soft px-3 py-3">
+            className="overflow-hidden rounded-2xl bg-[#F7F7F7]">
+            <View className="flex-row items-center justify-between gap-2 bg-soft px-3 py-3">
               <View className="min-w-0 flex-1 flex-row items-center gap-2">
                 <ModelThumb model={printer.modelCode} size={40} />
                 <StatusDot status={printer.status} size={10} />
@@ -431,7 +430,7 @@ export function DetailedList(props: GridProps) {
                   {printer.status === 'paused' ? <AlertTriangle color="#B86E00" size={12} /> : null}
                   {printer.status === 'heating' ? <Sparkles color="#26225F" size={12} /> : null}
                   <Text className="text-sm font-medium text-muted">{statusLabel(printer.status)}</Text>
-                  <Text className="font-mono text-[11px] text-brand">
+                  <Text className="font-mono text-2xs text-brand">
                     {liveReading(printer.status, `${printer.pingLatencyMs}ms`)}
                   </Text>
                 </View>
@@ -456,9 +455,9 @@ export function DetailedList(props: GridProps) {
                     </View>
                   </View>
                   <View className="flex-row items-end justify-between">
-                    <Text className="font-mono text-base font-semibold text-ink">
+                    <Text className="font-mono-bold text-base text-ink">
                       {job.progressPercent}%
-                      <Text className="text-xs font-normal text-muted">
+                      <Text className="font-mono text-xs text-muted">
                         {' '}
                         ({job.currentLayer} / {job.totalLayers} 层)
                       </Text>
@@ -481,7 +480,7 @@ export function DetailedList(props: GridProps) {
                       {idleCaption(printer.status, printer.connectionNote)}
                     </Text>
                   </View>
-                  <Text className="font-mono text-[11px] text-muted">
+                  <Text className="font-mono text-2xs text-muted">
                     {printer.status === 'connecting' ? 'CONNECTING' : printer.status === 'offline' ? 'OFFLINE' : 'ONLINE'}
                   </Text>
                 </View>
@@ -519,12 +518,6 @@ export function DetailedList(props: GridProps) {
                 <JobPauseButton printer={printer} onPause={onPause} onResume={onResume} />
                 <View className="min-w-[8px] flex-1" />
                 <Pressable
-                  onPress={() => onControl(printer)}
-                  className="flex-row items-center gap-1 rounded-xl border border-line bg-soft px-2.5 py-1.5">
-                  <SlidersHorizontal color="#26225F" size={14} />
-                  <Text className="text-sm text-ink">控制</Text>
-                </Pressable>
-                <Pressable
                   onPress={() => onMonitor(printer)}
                   className="flex-row items-center gap-1 rounded-xl bg-brand px-3 py-1.5">
                   <Tv color="#101010" size={14} />
@@ -557,9 +550,9 @@ function TempCell({
     <View className="flex-1 items-center rounded-lg border border-line bg-soft px-1 py-1.5">
       <View className="mb-0.5 flex-row items-center gap-1">
         {icon}
-        <Text className="text-[11px] text-muted">{label}</Text>
+        <Text className="text-2xs text-muted">{label}</Text>
       </View>
-      <Text className={`font-mono text-sm font-semibold ${tone}`} numberOfLines={1}>
+      <Text className={`font-mono-bold text-sm ${tone}`} numberOfLines={1}>
         {value}
       </Text>
     </View>
